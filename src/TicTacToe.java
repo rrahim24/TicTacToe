@@ -16,6 +16,7 @@ public class TicTacToe
 {
     /** Board Markers **/
     public static final String X_MARKER = "X";
+    private TicTacToeViewer viewer;
     public static final String O_MARKER = "O";
     public static final String BLANK = "-";
 
@@ -43,19 +44,20 @@ public class TicTacToe
      */
     public TicTacToe() {
         // Initialize Squares in the board
+
         this.board = new Square[3][3];
         for(int row = 0; row < this.board.length; row++) {
             for(int col = 0; col< this.board[row].length; col++) {
                 this.board[row][col] = new Square(row, col);
             }
         }
-
         // Initialize winning stats variables
         this.isGameOver = false;
         this.turn = 0;
         this.winner = BLANK;
         this.winIndex = -1;
         this.winDirection = -1;
+        viewer = new TicTacToeViewer(this);
     }
 
     /******************** Methods You May Find Helpful ********************/
@@ -110,17 +112,20 @@ public class TicTacToe
         // Loop until there is a winner or no more turns
         while(!this.checkWin() && this.checkTurn()) {
             this.printBoard();
+            viewer.repaint();
             System.out.println("Enter your Row Pick:" );
             int row = input.nextInt();
             System.out.println("Enter your Col Pick:" );
             int col = input.nextInt();
             if(this.pickLocation(row, col)) {
                 this.takeTurn(row, col);
+
             } else {
                 System.out.println("That space is taken, or you entered an invalid row/col");
             }
-        }
 
+        }
+        viewer.repaint();
         this.printBoard();
         this.isGameOver = true;
 
